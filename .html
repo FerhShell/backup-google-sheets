@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teste de Envio para Google Sheets</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #0f0;
+      font-family: monospace;
+      padding: 30px;
+    }
+    button {
+      padding: 15px 25px;
+      font-size: 16px;
+      background-color: #0ff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Teste de Backup no Google Sheets</h1>
+  <p>Clique no botão abaixo para enviar dados de teste pro Sheets.</p>
+  <button onclick="enviarErro()">Enviar Erro de Teste</button>
+
+  <script>
+    function enviarErro() {
+      fetch('https://script.google.com/macros/s/AKfycbyUU0dIZQJUnlkI3WqTveWOKh2f5ZeWDTMNvrg3ZRFFzhoKsTvH8bIHMxOSm6eaJD8a/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([
+          {
+            date: new Date().toLocaleString('pt-BR'),
+            client: "Cliente Teste",
+            operator: "Operador Fulano",
+            orderNumber: "12345",
+            description: "Erro fictício só pra testar o envio"
+          }
+        ])
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Resposta não OK: " + res.status);
+        return res.text();
+      })
+      .then(msg => alert("Resposta do servidor: " + msg))
+      .catch(err => {
+        console.error("Erro no envio:", err);
+        alert("Erro ao enviar para o Google Sheets. Veja console para detalhes.");
+      });
+    }
+  </script>
+
+</body>
+</html>
